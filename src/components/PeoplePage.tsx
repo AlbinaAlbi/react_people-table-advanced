@@ -32,7 +32,6 @@ export const PeoplePage = () => {
 
           <div className="column">
             <div className="box table-container">
-
               <PeopleTable />
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Person } from '../types';
 
 interface PersonLinkProps {
@@ -8,6 +8,7 @@ interface PersonLinkProps {
 
 export const PersonLink: React.FC<PersonLinkProps> = ({ name, people }) => {
   const person = people.find(p => p.name === name);
+  const location = useLocation();
 
   if (!person) {
     return <>{name}</>;
@@ -15,7 +16,10 @@ export const PersonLink: React.FC<PersonLinkProps> = ({ name, people }) => {
 
   return (
     <NavLink
-      to={`/people/${person.slug}`}
+      to={{
+        pathname: `/people/${person.slug}`,
+        search: location.search,
+      }}
       className={person.sex === 'f' ? 'has-text-danger' : ''}
     >
       {person.name}

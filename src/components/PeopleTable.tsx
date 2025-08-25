@@ -13,6 +13,7 @@ export const PeopleTable = () => {
   const { slug } = useParams();
   const { people, loading } = usePersons();
   const [searchParams, setSearchParams] = useSearchParams();
+  const query = (searchParams.get('query') || '').trim().toLowerCase();
 
   const sort = searchParams.get('sort') as SortKey | null;
   const order = searchParams.get('order') as Order | null;
@@ -52,7 +53,13 @@ export const PeopleTable = () => {
 
     const matchesSex = !getSex || getSex === p.sex;
 
-    return matchesCentuiries && matchesSex;
+    const matchesQuery =
+      !query ||
+      p.name?.toLowerCase().includes(query) ||
+      p.motherName?.toLowerCase().includes(query) ||
+      p.fatherName?.toLowerCase().includes(query);
+
+    return matchesCentuiries && matchesSex && matchesQuery;
   });
 
   const sortedPeople = [...filteredPeople];
@@ -64,7 +71,7 @@ export const PeopleTable = () => {
           ? b[sort].localeCompare(a[sort])
           : a[sort].localeCompare(b[sort]);
       } else if (sort === 'born' || sort === 'died') {
-        return order === 'desc' ? a[sort] - b[sort] : b[sort] - a[sort];
+        return order === 'desc' ? b[sort] - a[sort] : a[sort] - b[sort];
       }
 
       return 0;
