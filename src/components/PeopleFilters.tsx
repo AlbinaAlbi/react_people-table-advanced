@@ -45,6 +45,18 @@ export const PeopleFilters = () => {
     setSearchParams(newParams);
   }
 
+  function handleSearch(value: string) {
+    const newParams = new URLSearchParams(searchParams);
+
+    if (value.trim()) {
+      newParams.set('query', value.trim());
+    } else {
+      newParams.delete('query');
+    }
+
+    setSearchParams(newParams);
+  }
+
   return (
     <nav className="panel">
       <p className="panel-heading">Filters</p>
@@ -79,6 +91,8 @@ export const PeopleFilters = () => {
             type="search"
             className="input"
             placeholder="Search"
+            defaultValue={searchParams.get('query') || ''}
+            onChange={e => handleSearch(e.target.value)}
           />
 
           <span className="icon is-left">
